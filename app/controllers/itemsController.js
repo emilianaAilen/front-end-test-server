@@ -15,7 +15,10 @@ export const getItemDetail = async (req, res) => {
     const itemDescriptionResponse = await axios.get(`https://api.mercadolibre.com/items/${id}/description`);
     const itemDescriptionData = itemDescriptionResponse.data;
 
-    res.json(getItemResponseFormatted(itemDetailData, itemDescriptionData));
+    const itemCategoriesResponse = await axios.get(`https://api.mercadolibre.com/categories/${itemDetailData.category_id}`);
+    const itemCategoriesData = itemCategoriesResponse.data.path_from_root;
+
+    res.json(getItemResponseFormatted(itemDetailData, itemDescriptionData, itemCategoriesData));
   } catch (error) {
     res.status(500).json({ message: 'Error while getting product detail.' });
   }

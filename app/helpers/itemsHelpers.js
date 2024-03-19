@@ -1,6 +1,11 @@
+import { AUTHOR } from "../constants/constants";
+import { getCategoryNames } from "../utils/categories";
+import { getPrice } from "../utils/price";
+
 export const getItemResponseFormatted = (
   itemDetailData,
-  itemDescriptionData
+  itemDescriptionData,
+  categories
 ) => {
   const {
     id,
@@ -13,22 +18,18 @@ export const getItemResponseFormatted = (
     deal_ids,
   } = itemDetailData;
   const { plain_text } = itemDescriptionData;
-  const amount = Math.floor(price);
-  const decimals = price - amount;
 
   return {
+    author: AUTHOR,
+    categories: getCategoryNames(categories),
     item: {
       id,
       title,
-      price: {
-        currency: currency_id,
-        amount,
-        decimals,
-      },
+      price: getPrice(price, currency_id),
       picture: thumbnail,
       condition,
       free_shipping: shipping.free_shipping,
-      sold_quantity: deal_ids.lenght,
+      sold_quantity: deal_ids.length,
       description: plain_text,
     },
   };
